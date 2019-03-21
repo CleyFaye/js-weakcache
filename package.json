@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/CleyFaye/js-weakcache#readme",
   "dependencies": {
-    "eslint": "^5.15.3",
     "esm": "^3.2.15"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.3"
   }
 }
