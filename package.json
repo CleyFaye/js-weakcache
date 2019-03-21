@@ -25,6 +25,9 @@
   "dependencies": {
     "esm": "^3.2.15"
   },
+  "files": [
+    "lib/**/*.js"
+  ],
   "devDependencies": {
     "c8": "^3.4.0",
     "eslint": "^5.15.3",
