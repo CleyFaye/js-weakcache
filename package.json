@@ -4,7 +4,7 @@
   "description": "Cache system sort of similar to WeakMap but with some behavior control",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "c8 --include \"lib/**/*.js\" -- node -r esm node_modules/.bin/_mocha"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,8 @@
     "esm": "^3.2.15"
   },
   "devDependencies": {
-    "eslint": "^5.15.3"
+    "c8": "^3.4.0",
+    "eslint": "^5.15.3",
+    "mocha": "^6.0.2"
   }
 }
