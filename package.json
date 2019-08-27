@@ -23,14 +23,14 @@
   },
   "homepage": "https://github.com/CleyFaye/js-weakcache#readme",
   "dependencies": {
-    "esm": "^3.2.15"
+    "esm": "^3.2.25"
   },
   "files": [
     "lib/**/*.js"
   ],
   "devDependencies": {
-    "c8": "^3.4.0",
-    "eslint": "^5.15.3",
-    "mocha": "^6.0.2"
+    "c8": "^5.0.1",
+    "eslint": "^6.2.2",
+    "mocha": "^6.2.0"
   }
 }
