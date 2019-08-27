@@ -1,6 +1,6 @@
 {
   "name": "@cley_faye/js-weakcache",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cache system sort of similar to WeakMap but with some behavior control",
   "main": "index.js",
   "scripts": {
