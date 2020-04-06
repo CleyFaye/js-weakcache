@@ -4,7 +4,25 @@
   "description": "Cache system sort of similar to WeakMap but with some behavior control",
   "main": "index.js",
   "scripts": {
-    "test": "c8 --include \"lib/**/*.js\" -- node -r esm node_modules/.bin/_mocha"
+    "test": "nyc mocha test/**/*.js"
+  },
+  "nyc": {
+    "require": [
+      "esm"
+    ],
+    "extension": [
+      ".js"
+    ],
+    "include": [
+      "lib/**/*"
+    ],
+    "exclude": [
+      "test/**/*"
+    ],
+    "cache": false
+  },
+  "esm": {
+    "cache": false
   },
   "repository": {
     "type": "git",
@@ -22,15 +40,14 @@
     "url": "https://github.com/CleyFaye/js-weakcache/issues"
   },
   "homepage": "https://github.com/CleyFaye/js-weakcache#readme",
-  "dependencies": {
-    "esm": "^3.2.25"
-  },
+  "dependencies": {},
   "files": [
     "lib/**/*.js"
   ],
   "devDependencies": {
-    "c8": "^5.0.1",
-    "eslint": "^6.2.2",
-    "mocha": "^6.2.0"
+    "eslint": "^6.8.0",
+    "esm": "^3.2.25",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.1"
   }
 }
