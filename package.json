@@ -2,27 +2,10 @@
   "name": "@cley_faye/js-weakcache",
   "version": "0.1.4",
   "description": "Cache system sort of similar to WeakMap but with some behavior control",
-  "main": "index.js",
+  "main": "lib/weakcache.js",
+  "type": "module",
   "scripts": {
-    "test": "nyc mocha test/**/*.js"
-  },
-  "nyc": {
-    "require": [
-      "esm"
-    ],
-    "extension": [
-      ".js"
-    ],
-    "include": [
-      "lib/**/*"
-    ],
-    "exclude": [
-      "test/**/*"
-    ],
-    "cache": false
-  },
-  "esm": {
-    "cache": false
+    "test": "mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +13,6 @@
   },
   "keywords": [
     "cache",
-    "node",
     "javascript",
     "weakmap"
   ],
@@ -40,14 +22,14 @@
     "url": "https://github.com/CleyFaye/js-weakcache/issues"
   },
   "homepage": "https://github.com/CleyFaye/js-weakcache#readme",
-  "dependencies": {},
   "files": [
     "lib/**/*.js"
   ],
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "esm": "^3.2.25",
-    "mocha": "^7.1.1",
-    "nyc": "^15.0.1"
+    "@keeex/eslint-config": "^1.7.1",
+    "eslint": "^8.12.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-mocha": "^10.0.3",
+    "mocha": "^7.1.1"
   }
 }
