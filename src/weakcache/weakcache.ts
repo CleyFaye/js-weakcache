@@ -1,3 +1,4 @@
+import {Cache, KeyType} from "../types.js";
 import CacheEntry from "./entry.js";
 
 export interface WeakCacheOptions {
@@ -10,9 +11,9 @@ const defaultOptions: WeakCacheOptions = {maxSize: 64};
 
 /** Manage a cache of values that can be cleaned when it grows too big.
  */
-export default class WeakCache<ValueType = unknown> {
+export default class WeakCache<ValueType = unknown> implements Cache<ValueType> {
   #opt: WeakCacheOptions;
-  #cache = new Map<string, CacheEntry<ValueType>>();
+  #cache = new Map<KeyType, CacheEntry<ValueType>>();
 
   /** Create a cache object
    *
@@ -26,7 +27,7 @@ export default class WeakCache<ValueType = unknown> {
   }
 
   /** Set a cache value for the given key. */
-  public set(key: string, value: ValueType): void {
+  public set(key: KeyType, value: ValueType): void {
     if (value === undefined && this.#cache.has(key)) {
       this.#cache.delete(key);
       return;
@@ -40,10 +41,10 @@ export default class WeakCache<ValueType = unknown> {
 
   /** Return the cached value for a key.
    *
-   * @return {any}
+   * @return
    * The cached value, or undefined if the key is not in the cache.
    */
-  public get(key: string): ValueType | undefined {
+  public get(key: KeyType): ValueType | undefined {
     const cacheEntry = this.#cache.get(key);
     if (!cacheEntry) return undefined;
     this.#ageOthers(cacheEntry);

@@ -33,3 +33,26 @@ A `WeakCache` instance provides two method: `set(key, value)` and `get(key, valu
 Calling `set()` will write an entry in the cache, eventually clearing old entries, and calling
 `get()` will return the current value associated in the cache, or `undefined` if the value is not
 set (or was evicted).
+
+WeakValueCache
+--------------
+Keep a list of key→value, but `value` can be garbage collected.
+This is similar to `WeakMap` in other languages (JavaScript `WeakMap` behave differently).
+
+A basic algorithm is in place to remove dead keys regularly.
+
+TimeCache
+---------
+Set a cache where values expires automatically after a given duration.
+
+ProxyCache
+----------
+A cache that implements automatic fetch of data when there is a cache miss.
+Typical usage would be to temporarily cache API results to mimic regular HTTP cache, but with finer
+control and less request to a server.
+
+In such case, one would create a `TimeCache` instance with the desired expiration time and use a
+`ProxyCache` instance with this cache as the backend, and a function that returns a promise with the
+appropriate data.
+Subsequent calls to the proxy's `get()` method with the same key would return the same data, as long
+as it hasn't expired in the backing cache.
