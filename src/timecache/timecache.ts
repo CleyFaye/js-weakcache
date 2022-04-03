@@ -37,13 +37,13 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
         this.#map.delete(key);
       } else {
         currentEntry.value = value;
-        currentEntry.expiresAtDate = Date.now() + this.#options.entryDurationInMs;
+        currentEntry.expiresAtDate = this.#getExpireDate();
       }
     }
     if (value === undefined) return;
     const newEntry: TimeCacheEntry<ValueType> = {
       value,
-      expiresAtDate: Date.now() + this.#options.entryDurationInMs,
+      expiresAtDate: this.#getExpireDate(),
     };
     this.#map.set(key, newEntry);
     this.#armTimer(newEntry.expiresAtDate);
@@ -52,11 +52,13 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
   public get(key: KeyType): ValueType | undefined {
     const entry = this.#map.get(key);
     if (entry) {
-      if (this.#options.resetDurationOnGet) {
-        entry.expiresAtDate = Date.now() + this.#options.entryDurationInMs;
-      }
+      if (this.#options.resetDurationOnGet) entry.expiresAtDate = this.#getExpireDate();
       return entry.value;
     }
+  }
+
+  #getExpireDate() {
+    return Date.now() + this.#options.entryDurationInMs;
   }
 
   #cleanEntries() {
