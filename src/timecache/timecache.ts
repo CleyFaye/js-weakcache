@@ -50,7 +50,13 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
   }
 
   public get(key: KeyType): ValueType | undefined {
-    return this.#map.get(key)?.value;
+    const entry = this.#map.get(key);
+    if (entry) {
+      if (this.#options.resetDurationOnGet) {
+        entry.expiresAtDate = Date.now() + this.#options.entryDurationInMs;
+      }
+      return entry.value;
+    }
   }
 
   #cleanEntries() {
@@ -73,6 +79,6 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
     if (this.#timeout !== undefined) return;
     const now = Date.now();
     const interval = Math.max(1, targetDate - now);
-    this.#timeout = setInterval(this.#boundCleanerMethod, interval) as unknown as number;
+    this.#timeout = setTimeout(this.#boundCleanerMethod, interval) as unknown as number;
   }
 }
