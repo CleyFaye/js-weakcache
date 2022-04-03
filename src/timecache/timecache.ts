@@ -57,6 +57,14 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
     }
   }
 
+  public clear(): void {
+    this.#map.clear();
+    if (this.#timeout) {
+      clearTimeout(this.#timeout);
+      this.#timeout = undefined;
+    }
+  }
+
   #getExpireDate() {
     return Date.now() + this.#options.entryDurationInMs;
   }

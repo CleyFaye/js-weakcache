@@ -51,6 +51,10 @@ export default class WeakCache<ValueType = unknown> implements Cache<ValueType> 
     return cacheEntry.get();
   }
 
+  public clear(): void {
+    this.#cache.clear();
+  }
+
   /** Age all entries */
   #ageOthers(immuneEntry?: CacheEntry<ValueType>) {
     for (const [, cacheEntry] of this.#cache) {

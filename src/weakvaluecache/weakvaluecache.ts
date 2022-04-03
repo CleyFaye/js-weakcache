@@ -45,6 +45,10 @@ export default class WeakValueCache<ValueType extends object> implements Cache<V
     this.#map.set(key, new WeakRef(value));
   }
 
+  public clear(): void {
+    this.#map.clear();
+  }
+
   #countStep() {
     if (this.#cleanupSteps > 0) --this.#remainingSteps;
     if (this.#remainingSteps <= 0) this.#cleanDeadKeys();

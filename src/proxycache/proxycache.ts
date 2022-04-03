@@ -60,4 +60,13 @@ export default class ProxyCache<ValueType = unknown> {
   public set(key: KeyType, value?: ValueType): void {
     this.#backend.set(key, value);
   }
+
+  /**
+   * Clear all cached entries.
+   *
+   * Active fetch will still return a value and cache it.
+   */
+  public clear(): void {
+    this.#backend.clear();
+  }
 }
