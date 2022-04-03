@@ -5,11 +5,19 @@
   "main": "lib/weakcache/weakcache.js",
   "type": "module",
   "scripts": {
-    "test": "mocha lib/*.test.js lib/**/*.test.js",
+    "test": "mocha",
     "grunt": "npx grunt --gruntfile Gruntfile.cjs",
     "build": "npm run grunt -- clean build",
     "prepack": "npm run build",
     "check": "npx eslint . && npx tsc --noEmit"
+  },
+  "mocha": {
+    "spec": [
+      "src/**/*.test.ts"
+    ],
+    "node-option": [
+      "loader=ts-node/esm"
+    ]
   },
   "repository": {
     "type": "git",
@@ -32,10 +40,12 @@
     "!lib/**/*.test.js"
   ],
   "devDependencies": {
-    "@keeex/eslint-config": "^1.7.1",
+    "@keeex/eslint-config": "^1.7.3",
+    "@types/mocha": "^9.1.0",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
     "eslint": "^8.12.0",
+    "eslint-import-resolver-typescript": "^2.7.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-mocha": "^10.0.3",
     "grunt": "^1.4.1",
@@ -43,7 +53,7 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-run": "^0.8.1",
     "load-grunt-tasks": "^5.1.0",
-    "mocha": "^7.1.1",
+    "mocha": "^9.2.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
