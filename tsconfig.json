@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "target": "es2021",
+    "module": "esnext",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "src",
+    "removeComments": false,
+    "emitBOM": false,
+    "newLine": "lf",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
+}
