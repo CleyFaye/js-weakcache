@@ -4,9 +4,9 @@ import WeakCache from "./weakcache.js";
 
 describe("WeakCache", () => {
   describe("Basic operations", () => {
-    it("Set/get", () => {
-      const cache = new WeakCache();
-      scenario(
+    it("Set/get", async () => {
+      const cache = new WeakCache<number>();
+      await scenario(
         cache,
         [
           {method: "set", key: "test1", value: 34},
@@ -16,9 +16,9 @@ describe("WeakCache", () => {
         ],
       );
     });
-    it("Get non existent", () => {
-      const cache = new WeakCache();
-      scenario(
+    it("Get non existent", async () => {
+      const cache = new WeakCache<number>();
+      await scenario(
         cache,
         [
           {method: "get", key: "test1", value: undefined},
@@ -31,9 +31,9 @@ describe("WeakCache", () => {
   });
 
   describe("Checking LRU algorithm", () => {
-    it("Basic removal", () => {
-      const cache = new WeakCache({maxSize: 5});
-      scenario(
+    it("Basic removal", async () => {
+      const cache = new WeakCache<number>({maxSize: 5});
+      await scenario(
         cache,
         [
           {method: "set", key: "test1", value: 34},
@@ -51,9 +51,9 @@ describe("WeakCache", () => {
         ],
       );
     });
-    it("Reorder set", () => {
-      const cache = new WeakCache({maxSize: 4});
-      scenario(
+    it("Reorder set", async () => {
+      const cache = new WeakCache<number>({maxSize: 4});
+      await scenario(
         cache,
         [
           {method: "set", key: "test1", value: 34},
@@ -72,9 +72,9 @@ describe("WeakCache", () => {
         ],
       );
     });
-    it("Reorder get", () => {
-      const cache = new WeakCache({maxSize: 4});
-      scenario(
+    it("Reorder get", async () => {
+      const cache = new WeakCache<number>({maxSize: 4});
+      await scenario(
         cache,
         [
           {method: "set", key: "test1", value: 34},
@@ -93,9 +93,9 @@ describe("WeakCache", () => {
         ],
       );
     });
-    it("Lots of removal", () => {
-      const cache = new WeakCache({maxSize: 3});
-      scenario(
+    it("Lots of removal", async () => {
+      const cache = new WeakCache<number>({maxSize: 3});
+      await scenario(
         cache,
         [
           {method: "set", key: "test1", value: 34},
@@ -120,6 +120,25 @@ describe("WeakCache", () => {
           {method: "get", key: "test9", value: 104},
           {method: "get", key: "test10", value: 105},
           {method: "get", key: "test11", value: 106},
+        ],
+      );
+    });
+    it("Clear", async () => {
+      const cache = new WeakCache<number>();
+      await scenario(
+        cache,
+        [
+          {method: "set", key: "test1", value: 34},
+          {method: "set", key: "test2", value: 35},
+          {method: "set", key: "test3", value: 36},
+          {method: "clear"},
+          {method: "get", key: "test1", value: undefined},
+          {method: "get", key: "test2", value: undefined},
+          {method: "get", key: "test3", value: undefined},
+          {method: "set", key: "test4", value: 37},
+          {method: "get", key: "test4", value: 37},
+          {method: "clear"},
+          {method: "get", key: "test4", value: undefined},
         ],
       );
     });
