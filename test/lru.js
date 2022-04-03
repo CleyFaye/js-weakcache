@@ -4,7 +4,7 @@ import scenario from "./scenario.js";
 
 describe("Checking LRU algorithm", () => {
   it("Basic removal", () => {
-    const cache = new WeakCache({maxSize: 10, mode: WeakCache.modeLRU});
+    const cache = new WeakCache({maxSize: 5});
     scenario(
       cache,
       [
@@ -24,7 +24,7 @@ describe("Checking LRU algorithm", () => {
     );
   });
   it("Reorder set", () => {
-    const cache = new WeakCache({maxSize: 10, mode: WeakCache.modeLRU});
+    const cache = new WeakCache({maxSize: 4});
     scenario(
       cache,
       [
@@ -45,7 +45,7 @@ describe("Checking LRU algorithm", () => {
     );
   });
   it("Reorder get", () => {
-    const cache = new WeakCache({maxSize: 10, mode: WeakCache.modeLRU});
+    const cache = new WeakCache({maxSize: 4});
     scenario(
       cache,
       [
@@ -66,7 +66,7 @@ describe("Checking LRU algorithm", () => {
     );
   });
   it("Lots of removal", () => {
-    const cache = new WeakCache({maxSize: 10, mode: WeakCache.modeLRU});
+    const cache = new WeakCache({maxSize: 3});
     scenario(
       cache,
       [
