@@ -40,7 +40,7 @@
     "!lib/**/*.test.js"
   ],
   "devDependencies": {
-    "@keeex/eslint-config": "^1.7.3",
+    "@keeex/eslint-config": "^1.7.4",
     "@types/mocha": "^9.1.0",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
