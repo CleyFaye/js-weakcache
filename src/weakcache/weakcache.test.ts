@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import scenario from "../test/scenario.js";
+import scenario from "../test/scenario.test.js";
 import WeakCache from "./weakcache.js";
 
 describe("WeakCache", () => {

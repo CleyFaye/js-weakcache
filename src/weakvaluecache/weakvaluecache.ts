@@ -1,4 +1,4 @@
-import {Cache, KeyType} from "../types";
+import {Cache, KeyType} from "../types.js";
 
 /**
  * Associate values with keys.

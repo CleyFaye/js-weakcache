@@ -1,4 +1,4 @@
-import {Cache} from "../types";
+import {Cache} from "../types.js";
 
 export type FetchFunction<ValueType> = (key: KeyType) => Promise<ValueType | undefined>;
 

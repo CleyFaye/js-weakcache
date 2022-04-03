@@ -27,9 +27,9 @@ export default class WeakCache<ValueType = unknown> implements Cache<ValueType> 
   }
 
   /** Set a cache value for the given key. */
-  public set(key: KeyType, value: ValueType): void {
-    if (value === undefined && this.#cache.has(key)) {
-      this.#cache.delete(key);
+  public set(key: KeyType, value?: ValueType): void {
+    if (value === undefined) {
+      if (this.#cache.has(key)) this.#cache.delete(key);
       return;
     }
     this.#ageOthers();
