@@ -24,7 +24,11 @@ module.exports = grunt => {
     run: {
       "tsx": {
         cmd: "npx",
-        args: ["tsc"],
+        args: [
+          "tsc",
+          "-p",
+          "tsconfig_build.json",
+        ],
       },
     },
     usebanner: {
