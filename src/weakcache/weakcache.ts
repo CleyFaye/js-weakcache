@@ -1,32 +1,31 @@
 import {Cache, KeyType} from "../types.js";
-import CacheEntry from "./entry.js";
 
+/** Configuration options for WeakCache */
 export interface WeakCacheOptions {
   /** Maximum number of entries in the WeakCache */
   maxSize: number;
 }
 
-/** Default values */
-const defaultOptions: WeakCacheOptions = {maxSize: 64};
+/** Information about a single WeakCache entry */
+interface WeakCacheEntry<ValueType> {
+  /** How long since this entry was accessed. It is reset to 0 on each access. */
+  age: number;
+  value: ValueType;
+}
 
-/** Manage a cache of values that can be cleaned when it grows too big.
- */
+/** Manage a cache of values that can be cleaned when it grows too big. */
 export default class WeakCache<ValueType = unknown> implements Cache<ValueType> {
   #opt: WeakCacheOptions;
-  #cache = new Map<KeyType, CacheEntry<ValueType>>();
+  #cache = new Map<KeyType, WeakCacheEntry<ValueType>>();
 
-  /** Create a cache object
-   *
-   */
   public constructor(options?: Partial<WeakCacheOptions>) {
     this.#opt = {
-      ...defaultOptions,
+      maxSize: 64,
       ...options,
     };
     if (this.#opt.maxSize <= 0) throw new Error("Cache size can't be negative or null");
   }
 
-  /** Set a cache value for the given key. */
   public set(key: KeyType, value?: ValueType): void {
     if (value === undefined) {
       if (this.#cache.has(key)) this.#cache.delete(key);
@@ -36,33 +35,37 @@ export default class WeakCache<ValueType = unknown> implements Cache<ValueType> 
     if (!this.#cache.has(key) && (this.#entriesCount() >= this.#opt.maxSize)) {
       this.#removeStaleEntries();
     }
-    this.#cache.set(key, new CacheEntry(value));
+    this.#cache.set(
+      key,
+      {
+        age: 0,
+        value,
+      },
+    );
   }
 
-  /** Return the cached value for a key.
-   *
-   * @return
-   * The cached value, or undefined if the key is not in the cache.
-   */
   public get(key: KeyType): ValueType | undefined {
     const cacheEntry = this.#cache.get(key);
     if (!cacheEntry) return undefined;
     this.#ageOthers(cacheEntry);
-    return cacheEntry.get();
+    cacheEntry.age = 0;
+    return cacheEntry.value;
   }
 
   public clear(): void {
     this.#cache.clear();
   }
 
-  /** Age all entries */
-  #ageOthers(immuneEntry?: CacheEntry<ValueType>) {
+  /** Age all entries, used to determine which one have to go if cleaning is needed */
+  #ageOthers(immuneEntry?: WeakCacheEntry<ValueType>) {
     for (const [, cacheEntry] of this.#cache) {
-      if (cacheEntry !== immuneEntry) cacheEntry.doAge();
+      if (cacheEntry !== immuneEntry) {
+        if (cacheEntry.age < Number.MAX_SAFE_INTEGER) ++cacheEntry.age;
+      }
     }
   }
 
-  /** Remove entries until the cache is smaller than the allocated space */
+  /** Remove entries until the cache is smaller than the configured number of entries */
   #removeStaleEntries() {
     while (this.#entriesCount() >= this.#opt.maxSize) {
       let candidate;

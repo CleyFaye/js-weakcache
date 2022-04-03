@@ -21,6 +21,17 @@ export default class ProxyCache<ValueType = unknown> {
     this.#fetchFunction = fetchFunction;
   }
 
+  /**
+   * Retrieve a value from the cache.
+   *
+   * If the value is in the cache, it is returned immediately.
+   * Otherwise, it is fetched, cached then returned.
+   *
+   * Multiple calls on the same key while the fetch function is running will not cause multiple
+   * calls to the fetch function.
+   *
+   * If the fetch call fails, no value is cached and the fetch exception is raised to the caller.
+   */
   public async get(key: KeyType): Promise<ValueType | undefined> {
     const storedValue = this.#backend.get(key);
     if (storedValue !== undefined) return storedValue;
@@ -30,12 +41,15 @@ export default class ProxyCache<ValueType = unknown> {
       // Start a new fetch
       const promise = this.#fetchFunction(key);
       this.#fetchMap.set(key, promise);
-      const value = await promise;
-      this.#fetchMap.delete(key);
-      const setValue = this.#backend.get(key);
-      if (setValue !== undefined) return setValue;
-      this.#backend.set(key, value);
-      return value;
+      try {
+        const value = await promise;
+        const setValue = this.#backend.get(key);
+        if (setValue !== undefined) return setValue;
+        this.#backend.set(key, value);
+        return value;
+      } finally {
+        this.#fetchMap.delete(key);
+      }
     }
     // Wait existing fetch
     const value = await currentFetchPromise;

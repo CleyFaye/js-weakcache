@@ -1,8 +1,10 @@
 import {Cache, KeyType} from "../types.js";
 
 /**
- * Associate values with keys.
- * Values can be garbage-collected, causing them to be undefined.
+ * Cache that allow values to be garbage-collected.
+ *
+ * When values are garbage collected, the keys are retained for a while.
+ * This behavior can be fine-tuned by altering the settings in the constructor.
  */
 export default class WeakValueCache<ValueType extends object> implements Cache<ValueType> {
   #cleanupSteps: number;

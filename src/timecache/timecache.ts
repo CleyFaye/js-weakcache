@@ -1,12 +1,17 @@
 import {Cache} from "../types.js";
 
+/** Configuration option for TimeCache */
 export interface TimeCacheOptions {
+  /** How long until a cache entry is removed from the cache. */
   entryDurationInMs: number;
+  /** Set to true to reset the timer of an entry when it is retrieved */
   resetDurationOnGet: boolean;
 }
 
+/** A single entry in a TimeCache */
 interface TimeCacheEntry<ValueType> {
   value: ValueType;
+  /** The date at which this entry should be removed */
   expiresAtDate: number;
 }
 
@@ -65,10 +70,12 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
     }
   }
 
+  /** Return the expiration date for an entry created at this point in time */
   #getExpireDate() {
     return Date.now() + this.#options.entryDurationInMs;
   }
 
+  /** Purge old entries */
   #cleanEntries() {
     this.#timeout = undefined;
     const now = Date.now();
@@ -85,6 +92,11 @@ export default class TimeCache<ValueType = unknown> implements Cache<ValueType> 
     if (nextExpireDate !== undefined) this.#armTimer(nextExpireDate);
   }
 
+  /**
+   * Make sure the timer is set.
+   *
+   * Can be safely called multiple time, at most one timer will be set.
+   */
   #armTimer(targetDate: number) {
     if (this.#timeout !== undefined) return;
     const now = Date.now();

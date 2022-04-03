@@ -1,6 +1,9 @@
 const {readFileSync} = require("fs");
 const loadGruntTasks = require("load-grunt-tasks");
 
+/**
+ * Create a license text block to put on top of distributed files
+ */
 const licenseJS = [
   "/**",
   " * @license",

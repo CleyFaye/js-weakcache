@@ -18,7 +18,7 @@ The "least frequently used" implementation was also removed, as it was not very 
 Construction:
 
 ```JavaScript
-import WeakCache from "@cley_faye/js-weakcache";
+import WeakCache from "@cley_faye/js-weakcache/lib/weakcache/weakcache.js";
 
 const cache = new WeakCache({
   // Maximum entries count
@@ -41,9 +41,21 @@ This is similar to `WeakMap` in other languages (JavaScript `WeakMap` behave dif
 
 A basic algorithm is in place to remove dead keys regularly.
 
+### Usage
+
+```JavaScript
+import WeakValueCache from "@cley_faye/js-weakcache/lib/weakvaluecache.js";
+```
+
 TimeCache
 ---------
 Set a cache where values expires automatically after a given duration.
+
+### Usage
+
+```JavaScript
+import TimeCache from "@cley_faye/js-weakcache/lib/timecache/timecache.js";
+```
 
 ProxyCache
 ----------
@@ -56,3 +68,39 @@ In such case, one would create a `TimeCache` instance with the desired expiratio
 appropriate data.
 Subsequent calls to the proxy's `get()` method with the same key would return the same data, as long
 as it hasn't expired in the backing cache.
+
+### Usage
+
+```JavaScript
+import ProxyCache from "@cley_faye/js-weakcache/lib/proxycache/proxycache.js";
+import TimeCache from "@cley_faye/js-weakcache/lib/timecache/timecache.js";
+
+// Function that perform some async data fetching
+const getFromAPI = id => fetch(`https://some.api.invalid/${id}`).then(res => res.json());
+
+const cache = new TimeCache({entryDurationInMs: 1000, resetDurationOnGet: true});
+const proxy = new ProxyCache(cache, getFromAPI);
+
+// Retrieve data from function through proxy
+const value = await proxy.get(34);
+
+// Subsequent calls to proxy will not perform a fetch call as long as the calls are less than 1000ms
+// apart, as configured above
+const value2 = await proxy.get(34); // Will not trigger the getFromAPI() function call
+
+// Waiting long enough will cause the value to expire from the cache, and trigger a new call
+await new Promise(resolve => {
+  setTimeout(resolve, 1500);
+});
+
+const value3 = await proxy.get(34); // Will trigget a new call from getFromAPI()
+
+// Also, if the cached value is expected to become invalid because of outside action (user, etc.)
+// the cache entry can be invalidated/updated
+
+// Invalidate data…
+proxy.set(34);
+
+// …or replace data with updated value, if available
+proxy.set(34, someNewValue);
+```
